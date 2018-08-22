@@ -11,3 +11,4 @@ def hello():
 @app.route("/status")
 def status():
     return "Status of the devices"
+ 
