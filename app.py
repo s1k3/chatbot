@@ -1,11 +1,13 @@
 from flask import Flask
-
+import nltk
 app = Flask(__name__)
 
 
 @app.route("/comment")
 def comment():
-    return "Hello World!"
+	sentence = 'This is a sentence.'
+	tokens = nltk.word_tokenize(sentence)
+    return tokens[2]
 
 
 @app.route("/")
