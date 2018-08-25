@@ -1,0 +1,51 @@
+command,value
+Switch the fan,yes
+Switch the light,yes
+Power the fan,yes
+Power the light,yes
+Switch On the Light,yes
+Switch Off the Light,no
+Switch On the Fan,yes
+Switch Off the Fan,no
+Put the light,yes
+Put the fan,yes
+Put On the Light,yes
+Put Off the Light,no
+Put On the Fan,yes
+Put Off the Fan,no
+Start the Light,yes
+Stop the Light,no
+Start the Fan,yes
+Stop the Fan,no
+Make Bright the Light,yes
+Illuminate the Light,yes
+Darken the Light,no
+Cut Off the Connection of Light,no
+Cut Off the Connection of Fan,no
+Chop the Connection of Light,no
+Chop the Connection of Fan,no
+Solid the Line of Light,yes
+Solid the Line of Fan,yes
+Terminate the Connection of Light,no
+Terminate the Connection of Fan,no
+Eliminate the Connection of Light
+Eliminate the Connection of Fan,no
+Dismiss the Connection of Light,no
+Abort the Connection of Light,no
+Discontinue the Connection of Light,no
+Dismiss the Connection of Fan,no
+Abort the Connection of Fan,no
+Discontinue the Connection of Fan,no
+Drop the Light,no
+Commence the Fan,no
+Allow the Connection of Light,yes
+Continue the Connection of Light,yes
+Establish the Connection of Light,yes
+Allow the Connection of Fan,yes
+Continue the Connection of Fan,yes
+Establish the Connection of Fan,yes
+Engage the Connection for Light,yes
+Engage the Connection for Fan,yes
+Shut down the light,no
+Shut down the fan,no
+
