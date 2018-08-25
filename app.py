@@ -5,8 +5,8 @@ app = Flask(__name__)
 
 @app.route("/comment")
 def comment():
-	sentence = 'This is a sentence.'
-	tokens = nltk.word_tokenize(sentence)
+    sentence = 'This is a sentence.'
+    tokens = nltk.word_tokenize(sentence)
     return tokens[2]
 
 
