@@ -12,6 +12,23 @@ devices = [
 
 
 def get_classifier():
+    data=get_data()
+    trainings=data['trainings']
+    words=data['words']
+    t = []
+    for training in trainings:
+        tokens = word_tokenize(training[0])
+        attribute_set = {}
+        for token in tokens:
+            if token not in stop_words and token not in devices:
+                attribute_set[token] = token in words
+        t += [(attribute_set, training[1])]
+
+    classifier = nltk.NaiveBayesClassifier.train(t)
+    return classifier
+
+
+def get_data():
     trainings = []
     # Read the training data set
     with open('training.csv', 'r') as csvfile:
@@ -30,30 +47,7 @@ def get_classifier():
             if token not in stop_words and token not in devices:
                 words += [token]
     words = set(words)
-    t = []
-    for training in trainings:
-        tokens = word_tokenize(training[0])
-        attribute_set = {}
-        for token in tokens:
-            if token not in stop_words and token not in devices:
-                attribute_set[token] = token in words
-        t += [(attribute_set, training[1])]
-
-    classifier = nltk.NaiveBayesClassifier.train(t)
-    test_sentence = "run the fan"
-    test_sent_features = {}
-    tokens=word_tokenize(test_sentence.lower())
-    for token in tokens:
-        # if token  not in stop_words and token not in devices:
-        test_sent_features[token]=token in words
-    print(test_sent_features)
-    print(test_sentence + "," + classifier.classify(test_sent_features))
-    sum=(classifier.prob_classify(test_sent_features).prob("yes") * 100)+classifier.prob_classify(test_sent_features).prob("no") * 100
-    print("Sum: ",sum)
-    print("Yes:",(classifier.prob_classify(test_sent_features).prob("yes") * 100),
-          "No:",classifier.prob_classify(test_sent_features).prob("no") * 100,
-          "None",classifier.prob_classify(test_sent_features).prob(None))
-
-
-get_classifier()
-
+    return {
+        'trainings': trainings,
+        'words': words
+    }

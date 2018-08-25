@@ -1,5 +1,8 @@
 from flask import Flask
 import nltk
+import naive_bayes
+from nltk.tokenize import word_tokenize
+
 app = Flask(__name__)
 
 
@@ -12,7 +15,16 @@ def comment():
 
 @app.route("/")
 def index():
-    return "Hello World!"
+    classifier = naive_bayes.get_classifier()
+    test_sentence = "turn on the light"
+    test_sent_features = {}
+    tokens = word_tokenize(test_sentence.lower())
+    words = naive_bayes.get_data()['words']
+    for token in tokens:
+        test_sent_features[token] = token in words
+    yes = "{0:.2f}".format(classifier.prob_classify(test_sent_features).prob("yes") * 100)
+    no = "{0:.2f}".format(classifier.prob_classify(test_sent_features).prob("no") * 100)
+    return "Yes:"+yes+"No:"+no
 
 
 @app.route("/devices")
