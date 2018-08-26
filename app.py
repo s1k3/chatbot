@@ -31,7 +31,7 @@ def index():
     }
 
     device = {
-        "fan": 0,
+        "fan": 1,
         "light": 1
     }
 
