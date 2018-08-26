@@ -31,8 +31,8 @@ def index():
     }
 
     device = {
-        "fan": 1,
-        "light": 1
+        "fan": 0,
+        "light": 0
     }
 
     return jsonify(device)
