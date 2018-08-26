@@ -30,7 +30,12 @@ def index():
         'no': "{0:.2f}".format(classifier.prob_classify(test_sent_features).prob("no") * 100)
     }
 
-    return jsonify(response)
+    device = {
+        "fan": 1,
+        "light": 0
+    }
+
+    return jsonify(device)
 
 
 @app.route("/devices")
