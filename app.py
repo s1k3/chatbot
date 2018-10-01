@@ -1,8 +1,10 @@
 from flask import Flask
 from flask import jsonify
+from flask import request
 import nltk
 import naive_bayes
 from nltk.tokenize import word_tokenize
+import jaro_winkler
 
 app = Flask(__name__)
 
@@ -14,33 +16,46 @@ def comment():
     return tokens[2]
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
+    sentence = ""
     classifier = naive_bayes.get_classifier()
-
-    test_sentence = "turn on the light"
-    test_sent_features = {}
-    tokens = word_tokenize(test_sentence.lower())
+    if request.method == 'POST':
+        sentence = request.form['command']
+    else:
+        sentence = request.args.get('command')
+    sentence_features = {}
+    devices = jaro_winkler.devices(sentence)
+    tokens = word_tokenize(sentence.lower())
     words = naive_bayes.get_data()['words']
     for token in tokens:
-        test_sent_features[token] = token in words
+        sentence_features[token] = token in words
 
     response = {
-        'yes': "{0:.2f}".format(classifier.prob_classify(test_sent_features).prob("yes") * 100),
-        'no': "{0:.2f}".format(classifier.prob_classify(test_sent_features).prob("no") * 100)
+        'yes': int(classifier.prob_classify(sentence_features).prob("yes") * 100),
+        'no': int(classifier.prob_classify(sentence_features).prob("no") * 100)
     }
+    # check the devices
+    if len(devices['names']) == 1:
+        if response['yes'] > response['no']:
+            return devices["names"][0] + " is turned on"
+        elif response['yes'] < response['no']:
+            return devices["names"][0] + " is turned off"
+        else:
+            return "Sorry Could not understand that"
+    elif len(devices['names']) == 0:
+        return "your device name is wrong"
 
-    device = {
-        "fan": 1,
-        "light": 0
-    }
-
-    return jsonify(device)
+    return str(response['yes']) + ' ' + str(response['no'])
 
 
 @app.route("/devices")
 def devices():
-    return "Status of the devices"
+    device = {
+        "fan": 1,
+        "light": 0
+    }
+    return jsonify(devices)
 
 
 if __name__ == "__main__":
