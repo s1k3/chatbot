@@ -5,6 +5,8 @@ import nltk
 import naive_bayes
 from nltk.tokenize import word_tokenize
 import jaro_winkler
+import output
+import wh_question
 
 app = Flask(__name__)
 
@@ -24,6 +26,9 @@ def index():
         sentence = request.form['command']
     else:
         sentence = request.args.get('command')
+    question = wh_question.is_question(sentence)
+    if question != '':
+        return question
     sentence_features = {}
     devices = jaro_winkler.devices(sentence)
     tokens = word_tokenize(sentence.lower())
@@ -38,8 +43,14 @@ def index():
     # check the devices
     if len(devices['names']) == 1:
         if response['yes'] > response['no']:
+            for key in devices['device_list']:
+                if devices['device_list'][key] != '':
+                    output.change_device(key, "1")
             return devices["names"][0] + " is turned on"
         elif response['yes'] < response['no']:
+            for key in devices['device_list']:
+                if devices['device_list'][key] != '':
+                    output.change_device(key, "0")
             return devices["names"][0] + " is turned off"
         else:
             return "Sorry Could not understand that"
@@ -51,10 +62,7 @@ def index():
 
 @app.route("/devices")
 def devices():
-    device = {
-        "fan": 1,
-        "light": 0
-    }
+    devices = output.read_devices()
     return jsonify(devices)
 
 
